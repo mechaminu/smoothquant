@@ -22,7 +22,6 @@ def quantize_weight_per_tensor_absmax(w, n_bits=8):
     w.div_(scales).round_().mul_(scales)
     return w
 
-
 @torch.no_grad()
 def quantize_activation_per_token_absmax(t, n_bits=8):
     t_shape = t.shape
@@ -123,7 +122,7 @@ class W8A8Linear(nn.Module):
             bits=bits
         )
 
-        # weight의 max-min range가 크면 클수록 bit를 더 잘 주도록
+        # weight의 max-min range가 크면 클수록 bit를 더 잘 주도록 해야
 
         if weight_quant == "per_channel":   # 이걸 쓰는걸로 상정
             new_module.weight = quantize_weight_per_channel_absmax(
@@ -138,8 +137,6 @@ class W8A8Linear(nn.Module):
         new_module.weight_quant_name = weight_quant
         if module.bias is not None:
             new_module.bias = module.bias
-
-        print(new_module)
 
         return new_module
 
