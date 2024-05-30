@@ -2,7 +2,6 @@ import torch
 from torch import nn
 from functools import partial
 
-
 @torch.no_grad()
 def quantize_weight_per_channel_absmax(w, n_bits=8):
     # w: (out_features, in_features)
@@ -11,7 +10,6 @@ def quantize_weight_per_channel_absmax(w, n_bits=8):
     scales.clamp_(min=1e-5).div_(q_max)
     w.div_(scales).round_().mul_(scales)
     return w
-
 
 @torch.no_grad()
 def quantize_weight_per_tensor_absmax(w, n_bits=8):
@@ -42,7 +40,6 @@ def quantize_activation_per_tensor_absmax(t, n_bits=8):
     scales.clamp_(min=1e-5).div_(q_max)
     t.div_(scales).round_().mul_(scales)
     return t
-
 
 class W8A8Linear(nn.Module):
     def __init__(
@@ -193,7 +190,6 @@ def quantize_llama_like(
         LlamaAttention,
         LlamaMLP,
     )
-
     from transformers.models.mistral.modeling_mistral import (
         MistralAttention,
         MistralMLP,
@@ -237,7 +233,6 @@ def quantize_llama_like(
                 m.o_proj, weight_quant=weight_quant, act_quant=act_quant, bits=bits
             )
     return model
-
 
 def quantize_mixtral(
     model, weight_quant="per_channel", act_quant="per_token", quantize_bmm_input=False
